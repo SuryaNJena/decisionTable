@@ -94,7 +94,7 @@ const RULE = `rule {{ template "RULENAME" . }} {{template "SALIENCE" . }} {
  {{ template "INTERFERENCE" }}
 }`
 
-const RULENAME = `{{define "RULENAME"}}row_{{ .Name }} "{{ .Annotation }}"{{end}}`
+const RULENAME = `{{define "RULENAME"}}{{.TableName}}row_{{ .Name }} "{{ .Annotation }}"{{end}}`
 
 const WHEN = `{{define "WHEN" }}
 {{- range $index, $val := .Expressions }}

@@ -3,11 +3,13 @@ package generate
 import (
 	"bytes"
 	"errors"
+	"fmt"
+	"text/template"
+
 	grule "github.com/global-soft-ba/decisionTable/conv/grule/data"
 	"github.com/global-soft-ba/decisionTable/conv/grule/generate/grl"
 	"github.com/global-soft-ba/decisionTable/conv/grule/generate/json"
 	"github.com/global-soft-ba/decisionTable/data/standard"
-	"text/template"
 )
 
 var (
@@ -21,6 +23,11 @@ func CreateGruleGenerator() GruleGenerator {
 type GruleGenerator struct {
 	templates *template.Template
 	format    grule.OutputFormat
+}
+
+type ruleTemplateData struct {
+    Rule      grule.Rule // The current rule being processed
+    TableName string     // The name of the decision table
 }
 
 func (g *GruleGenerator) Generate(rules grule.RuleSet, targetFormat string) (interface{}, error) {
@@ -51,9 +58,17 @@ func (g *GruleGenerator) generate(ruleSet grule.RuleSet) ([]string, error) {
 	var result []string
 	for _, v := range ruleSet.Rules {
 		var tpl bytes.Buffer
-		err := g.templates.Execute(&tpl, v)
+
+		// Create the combined data structure
+        templateData := ruleTemplateData{
+            Rule:      v,
+            TableName: ruleSet.Name, // Get the table name from the RuleSet
+        }
+
+
+		err := g.templates.Execute(&tpl, templateData)
 		if err != nil {
-			return []string{}, err
+			return []string{}, fmt.Errorf("template execution failed for rule %s: %w", v.Name, err)
 		}
 		result = append(result, tpl.String())
 	}
