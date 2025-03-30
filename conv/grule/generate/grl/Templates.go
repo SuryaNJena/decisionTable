@@ -1,9 +1,10 @@
 package grl
 
 import (
+	"text/template"
+
 	"github.com/global-soft-ba/decisionTable/conv/grule/data"
 	"github.com/global-soft-ba/decisionTable/data/hitPolicy"
-	"text/template"
 )
 
 func GenerateTemplates(hp hitPolicy.HitPolicy, interference bool) (*template.Template, error) {
@@ -94,10 +95,10 @@ const RULE = `rule {{ template "RULENAME" . }} {{template "SALIENCE" . }} {
  {{ template "INTERFERENCE" }}
 }`
 
-const RULENAME = `{{define "RULENAME"}}{{.TableName}}row_{{ .Name }} "{{ .Annotation }}"{{end}}`
+const RULENAME = `{{define "RULENAME"}}{{.TableKey}}_row_{{ .Rule.Name }} "{{ .Rule.Annotation }}"{{end}}`
 
 const WHEN = `{{define "WHEN" }}
-{{- range $index, $val := .Expressions }}
+{{- range $index, $val := .Rule.Expressions }}
 {{- if eq $index 0}}
 	{{template "ENTRY" $val}}
 	{{- else}}
@@ -107,7 +108,7 @@ const WHEN = `{{define "WHEN" }}
 {{- end}}`
 
 const THEN = `{{define "THEN"}}
- {{- range $index, $val := .Assignments }}
+ {{- range $index, $val := .Rule.Assignments }}
 	{{template "ENTRY" $val}};
  {{- end}}
 {{- end}}`
@@ -126,9 +127,9 @@ const ENTRY = `{{define "ENTRY"}}{{.Expression.Convert getFormat }}{{end}}`
 const (
 	SALIENCE          = `SALIENCE`
 	HitPolicyDefault  = `{{define "SALIENCE"}}{{end}}`
-	HitPolicyUnique   = `{{define "SALIENCE"}}salience {{.Salience}}{{end}}`
-	HitPolicyFirst    = `{{define "SALIENCE"}}salience {{.InvSalience}}{{end}}`
-	HitPolicyPriority = `{{define "SALIENCE"}}salience {{.Salience}}{{end}}`
+	HitPolicyUnique   = `{{define "SALIENCE"}}salience {{.Rule.Salience}}{{end}}`
+	HitPolicyFirst    = `{{define "SALIENCE"}}salience {{.Rule.InvSalience}}{{end}}`
+	HitPolicyPriority = `{{define "SALIENCE"}}salience {{.Rule.Salience}}{{end}}`
 )
 
 const (

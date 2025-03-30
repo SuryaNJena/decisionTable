@@ -60,7 +60,7 @@ func TestGruleGenerator_Generate(t *testing.T) {
 					},
 				},
 			},
-			want:    []string{"rule row_0 \"R1\" salience 0 {\n when \n\t(I1.L1 == 8)\n then \n\tO1.L1 = 4;\n Complete();\n}"},
+			want:    []string{"rule test1_row_0 \"R1\" salience 0 {\n when \n\t(I1.L1 == 8)\n then \n\tO1.L1 = 4;\n Complete();\n}"},
 			wantErr: false,
 		},
 		{
@@ -116,8 +116,8 @@ func TestGruleGenerator_Generate(t *testing.T) {
 				},
 			},
 			want: []string{
-				"rule row_0 \"R1\" salience 1 {\n when \n\t(I1.L1 == 8)\n then \n\tO1.L1 = 4;\n \n}",
-				"rule row_1 \"R2\" salience 0 {\n when \n\t(I1.L1 == 10)\n then \n\tO1.L1 = 100;\n \n}",
+				"rule test1_row_0 \"R1\" salience 1 {\n when \n\t(I1.L1 == 8)\n then \n\tO1.L1 = 4;\n \n}",
+				"rule test1_row_1 \"R2\" salience 0 {\n when \n\t(I1.L1 == 10)\n then \n\tO1.L1 = 100;\n \n}",
 			},
 			wantErr: false,
 		},
@@ -151,7 +151,7 @@ func TestGruleGenerator_Generate(t *testing.T) {
 					},
 				},
 			},
-			want:    []string{"rule row_0 \"R1\" salience 0 {\n when \n\t((I1.L1 >= 1) && (I1.L1 < 6))\n then \n\tO1.L1 = 4;\n Complete();\n}"},
+			want:    []string{"rule test1_row_0 \"R1\" salience 0 {\n when \n\t((I1.L1 >= 1) && (I1.L1 < 6))\n then \n\tO1.L1 = 4;\n Complete();\n}"},
 			wantErr: false,
 		},
 	}

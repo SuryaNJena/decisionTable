@@ -26,8 +26,8 @@ type GruleGenerator struct {
 }
 
 type ruleTemplateData struct {
-    Rule      grule.Rule // The current rule being processed
-    TableName string     // The name of the decision table
+	Rule      grule.Rule // The current rule being processed
+	TableKey  string     // The name of the decision table
 }
 
 func (g *GruleGenerator) Generate(rules grule.RuleSet, targetFormat string) (interface{}, error) {
@@ -60,11 +60,10 @@ func (g *GruleGenerator) generate(ruleSet grule.RuleSet) ([]string, error) {
 		var tpl bytes.Buffer
 
 		// Create the combined data structure
-        templateData := ruleTemplateData{
-            Rule:      v,
-            TableName: ruleSet.Name, // Get the table name from the RuleSet
-        }
-
+		templateData := ruleTemplateData{
+			Rule:      v,
+			TableKey: ruleSet.Key, // Get the table name from the RuleSet
+		}
 
 		err := g.templates.Execute(&tpl, templateData)
 		if err != nil {
